@@ -1,0 +1,42 @@
+server:
+  port: 8092
+  servlet:
+    context-path: /api
+
+spring:
+  profiles:
+    active:
+    - test
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        default_schema: public
+  flyway:
+    locations: classpath:/db/migration
+
+rest:
+  client:
+    timeout-read-ms: 5000
+
+integration:
+  api:
+    counter-location: http://localhost:8080/api/counter
+
+
+#swagger
+api-documentation:
+  enable: true
+
+host: energy-monitor.net
+
+---
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:postgresql://localhost:5436/energy-monitoring-db?useLegacyDatetimeCode=false
+    username: energy
+    password: monitor

@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  energy-monitoring-db:
+    image: postgres:11.1
+    container_name: energy-monitoring-db
+    restart: always
+    volumes:
+      - energy-monitoring-db-volume:/var/lib/postgresql/data
+    ports:
+      - 5436:5432
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  energy-monitoring-db-volume:
+
