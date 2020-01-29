@@ -71,7 +71,7 @@ public class CounterServiceTest {
 
     @Test
     public void generatePowerConsumptionReportForTwoVillagesTest() {
-        List<VillagePowerConsumption> powerConsumptionReport = counterService.generateConsumptionReport("24h");
+        List<VillagePowerConsumption> powerConsumptionReport = counterService.generateConsumptionReport(24L);
 
         assertEquals(powerConsumptionReport.size(), 2);
 

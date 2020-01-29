@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,22 +34,7 @@ public class CounterService {
         return savedPowerConsumption.getId();
     }
 
-    public List<VillagePowerConsumption> generateConsumptionReport(String duration) {
-        if (Objects.isNull(duration)) {
-            throw new NumberFormatException("Can't calculate Report for the empty duration");
-        }
-        Pattern durationPattern = Pattern.compile("([0-9]+)([h])");
-        Matcher matcher = durationPattern.matcher(duration);
-        matcher.find();
-
-        String parsedHours = matcher.group(1);
-        String parsedDuration = matcher.group(2);
-
-        if (Objects.isNull(parsedHours) || Objects.isNull(parsedDuration)) {
-            throw new NumberFormatException("Can't calculate Report for the wrong duration format.");
-        }
-
-        Long durationHours = Long.valueOf(parsedHours);
+    public List<VillagePowerConsumption> generateConsumptionReport(Long durationHours) {
 
         LocalDateTime endTime = LocalDateTime.now();
         LocalDateTime startTime = endTime.minusHours(durationHours);
@@ -76,7 +58,6 @@ public class CounterService {
                             villagePowerConsumptionList.add(villagePowerConsumption);
                         }
                 );
-
 
         return villagePowerConsumptionList;
     }

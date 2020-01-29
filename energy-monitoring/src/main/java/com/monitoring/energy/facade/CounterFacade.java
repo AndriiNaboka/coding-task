@@ -2,6 +2,7 @@ package com.monitoring.energy.facade;
 
 import com.monitoring.energy.application.dto.PowerConsumptionDto;
 import com.monitoring.energy.application.dto.VillagePowerConsumptionDto;
+import com.monitoring.energy.domain.converter.DurationStringHourToLongHourConverter;
 import com.monitoring.energy.domain.model.PowerConsumption;
 import com.monitoring.energy.domain.service.CounterService;
 import org.modelmapper.ModelMapper;
@@ -15,11 +16,14 @@ public class CounterFacade {
 
     private final CounterService counterService;
     private final ModelMapper modelMapper;
+    private final DurationStringHourToLongHourConverter stringToLongConverter;
 
     public CounterFacade(CounterService counterService,
-                         ModelMapper modelMapper) {
+                         ModelMapper modelMapper,
+                         DurationStringHourToLongHourConverter stringToLongConverter) {
         this.counterService = counterService;
         this.modelMapper = modelMapper;
+        this.stringToLongConverter = stringToLongConverter;
     }
 
     public Long savePowerConsumption(PowerConsumptionDto powerConsumptionDto) {
@@ -28,8 +32,9 @@ public class CounterFacade {
         return counterService.savePower(powerConsumption);
     }
 
-    public List<VillagePowerConsumptionDto> getPowerConsumptionReport(String duration) {
-        return counterService.generateConsumptionReport(duration).stream()
+    public List<VillagePowerConsumptionDto> getPowerConsumptionReport(String durationHours) {
+        return counterService.generateConsumptionReport(stringToLongConverter.convert(durationHours))
+                .stream()
                 .map(villagePowerConsumption -> modelMapper.map(villagePowerConsumption, VillagePowerConsumptionDto.class))
                 .collect(Collectors.toList());
     }
